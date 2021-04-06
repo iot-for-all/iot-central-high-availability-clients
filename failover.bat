@@ -1,0 +1,1 @@
+az iot central device manual-failover -n %1 -d %2 --central-api-uri %3 --central-dns-suffix %4

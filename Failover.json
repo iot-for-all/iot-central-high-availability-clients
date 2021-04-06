@@ -1,0 +1,95 @@
+[
+  {
+    "@id": "dtmi:Sample:Failover;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:Sample:Failover:temp;1",
+        "@type": "Telemetry",
+        "displayName": {
+          "en": "Temperature"
+        },
+        "name": "temp",
+        "schema": "double"
+      },
+      {
+        "@id": "dtmi:Sample:Failover:humidity;1",
+        "@type": "Telemetry",
+        "displayName": {
+          "en": "Humidity"
+        },
+        "name": "humidity",
+        "schema": "double"
+      },
+      {
+        "@id": "dtmi:Sample:Failover:battery;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Battery Level"
+        },
+        "name": "battery",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:Sample:Failover:echo;1",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Echo Message"
+        },
+        "name": "echo",
+        "request": {
+          "@type": "CommandPayload",
+          "displayName": {
+            "en": "Message"
+          },
+          "name": "message",
+          "schema": "string"
+        },
+        "response": {
+          "@type": "CommandPayload",
+          "displayName": {
+            "en": "Response"
+          },
+          "name": "response",
+          "schema": "string"
+        }
+      },
+      {
+        "@id": "dtmi:Sample:Failover:setAlarm;1",
+        "@type": "Command",
+        "durable": true,
+        "displayName": {
+          "en": "Set Alarm"
+        },
+        "name": "setAlarm",
+        "request": {
+          "@type": "CommandPayload",
+          "displayName": {
+            "en": "Time"
+          },
+          "name": "time",
+          "schema": "time"
+        }
+      },
+      {
+        "@id": "dtmi:Sample:Failover:fanSpeed;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Fan Speed"
+        },
+        "name": "fanSpeed",
+        "schema": "integer",
+        "writable": true
+      }
+    ],
+    "displayName": {
+      "en": "Failover"
+    },
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ]
+  }
+]
