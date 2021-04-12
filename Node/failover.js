@@ -35,12 +35,14 @@ let client = null;
 let deviceTwin = null;
 let connected = false;
 
+
 // calculate the device key using the symetric group key
 function computeDerivedSymmetricKey(masterKey, deviceId) {
     return crypto.createHmac('SHA256', Buffer.from(masterKey, 'base64'))
       .update(deviceId, 'utf8')
       .digest('base64');
 }
+
 
 // Azure IoT Central custom retry policy derived from ExponentialBackOffWithJitter
 class MultiHubRetryPolicy extends ExponentialBackOffWithJitter {
@@ -60,6 +62,7 @@ class MultiHubRetryPolicy extends ExponentialBackOffWithJitter {
     }
 }
 
+
 // handler for C2D message
 function messageHandler(msg) {
     let methodName = msg.properties.propertyList.find(o => o.key === 'method-name');
@@ -68,6 +71,7 @@ function messageHandler(msg) {
         console.log(`C2D method: ${methodName.value}(${msg.data.toString('utf-8')})`)
     }
 }
+
 
 // connect to IoT Central/Hub via Device Provisioning Servicee (DPS)
 async function connect() {
@@ -121,6 +125,10 @@ async function connect() {
                                 if (desiredPropertyReceiveOn) {
                                     deviceTwin.on('properties.desired', desiredPropertyHandler);
                                 }
+                                // handlers for the direct method
+                                if (directMethodReceiveOn) {
+                                    client.onDeviceMethod('echo', echoCommandHandler);
+                                }
                                 myResolve();
                             }
                         });
@@ -131,11 +139,13 @@ async function connect() {
     });
 }
 
+
 // handlef for connection event
 function connectHandler() {
     console.log('Connected to IoT Central');  
     connected = true;
 }
+
 
 // handler for disconnects, reconnect via DPS
 async function disconnectHandler() {
@@ -147,10 +157,12 @@ async function disconnectHandler() {
     }
 }
 
+
 // handler for errors
 function errorHandler(err) {
     console.log(`Error caught in error handler: ${err}`);
 }
+
 
 // sends telemetry on a set frequency
 async function sendTelemetry() {
@@ -167,6 +179,7 @@ async function sendTelemetry() {
     }
 }
 
+
 // sends reported properties on a set frequency
 async function sendReportedProperty() {
     if (connected) {
@@ -180,6 +193,7 @@ async function sendReportedProperty() {
         });
     }
 }
+
 
 // handles desired properties from IoT Central (or hub)
 function desiredPropertyHandler(patch) {
@@ -203,6 +217,7 @@ function desiredPropertyHandler(patch) {
     }
 }
 
+
 // handles direct method 'echo' from IoT Central (or hub)
 function echoCommandHandler(request, response) {
     console.log(`Executing direct method request: ${request.methodName}(${request.payload})`);
@@ -213,6 +228,7 @@ function echoCommandHandler(request, response) {
         }
     });
 }
+
 
 // handles the Cloud to Device (C2D) message setAlarm
 function setAlarmCommandHandler(request, response) {
@@ -232,11 +248,6 @@ function setAlarmCommandHandler(request, response) {
 
         // connect to IoT Central/Hub via Device Provisioning Service (DPS)
         await connect();
-
-        // handlers for the direct method
-        if (directMethodReceiveOn) {
-            client.onDeviceMethod('echo', echoCommandHandler);
-        }
 
         // start the interval timers to send telemetry and reported properties
         let sendTelemetryLoop = null;

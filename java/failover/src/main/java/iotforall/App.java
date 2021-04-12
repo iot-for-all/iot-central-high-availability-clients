@@ -20,8 +20,8 @@ import com.google.gson.*;
 public class App 
 {
     // Device settings - FILL IN YOUR VALUES HERE
-    private static final String SCOPE_ID = "0ne0024E73E";
-    private static final String ENROLLMENT_GROUP_SYMMETRIC_KEY = "wIqgiO1wK0++1cw1W55KAYL9k5ewRQtrcRNaniTyIBWGbv41YuU0wW9EymASF2wG4Rkb2BJ1eEuK5nQ7aUPlvA==";
+    private static final String SCOPE_ID = "<Put your scope id here from IoT Central Administration -> Device connection>";
+    private static final String ENROLLMENT_GROUP_SYMMETRIC_KEY = "<Put your group SAS primary key here from IoT Central Administration -> Device Connection -> SAS-IoT-Devices>";
 
     // Optional device settings - CHANGE IF DESIRED/NECESSARY
     private static final String GLOBAL_ENDPOINT = "global.azure-devices-provisioning.net";
