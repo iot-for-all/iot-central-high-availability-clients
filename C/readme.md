@@ -1,4 +1,4 @@
-# Instructions for running this sample
+# Instructions for using this sample
 
 The easiest way to run this sample is to inject this project into the SDK provisioning_client/samples directory.  Follow these instructions to compile and run this sample on Windows.  For Linux and MacOS follow the respective instructions in the Azure C SDK for building the SDK and then start at instruction 3. below.
 
