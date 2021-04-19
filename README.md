@@ -81,7 +81,8 @@ Each of the sample folders contains a readme that discusses running the sample a
 We are unable to predict when the next giant lizard attack will happen and to which data center so we have provided you with your own virtual giant lizard to test failover scenarios.  The IoT Central development team has updated the Azure Command Line Interface (CLI) extension for IoT Central so you can force a device to either fail-over or fail-back from one IoT Hub to another.
 
 ```diff
-- [Note: the Azure IoT Central CLI extension is not publically available at the time of writing this.  When the high availability feature in IoT Central ships the CLI will be made available] -
+- Note: the Azure IoT Central CLI extension is not publically available at the time of writing this.  
+- When the high availability feature in IoT Central ships the CLI will be made available
 ```
 
 To install the Azure CLI tool please see this link https://docs.microsoft.com/en-us/cli/azure/install-azure-cli  Once installed you can install the latest IoT Central extension by following the instructions here https://github.com/Azure/azure-iot-cli-extension
