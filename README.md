@@ -1,6 +1,10 @@
 # iot-central-high-availability-clients
 Coding Azure IoT devices to work with IoT Centrals high availability feature.  Each folder in this repository contains a full device client sample that illustrates how to code a high availability device client for use with IoT Central.
 
+Ask yourself is your IoT Central application ready for this kind of disaster:
+
+![giant lizard attack](https://github.com/iot-for-all/iot-central-high-availability-clients/blob/main/assets/disaster.jpg)
+
 &nbsp;
 ## What is this high-availability thing?
 The high availability option in IoT Central allows for an application to have two or more IoT Hubs associated with it in different locations.  This allows for one hub to have a failure and devices will continue to be available and operate against the other IoT Hub.  The magic ingredient in this is the Device Provisioning Service (DPS) that acts as a traffic cop directing your device to the correct IoT Hub to connect and send data to.  Lets look at a failover scenario.
