@@ -1,7 +1,7 @@
 # iot-central-high-availability-clients
 Coding Azure IoT devices to work with IoT Centrals high availability feature.  Each folder in this repository contains a full device client sample that illustrates how to code a high availability device client for use with IoT Central.
 
-Ask yourself is your IoT Central application ready for this kind of disaster:
+Ask yourself is your IoT Central device ready for this kind of disaster:
 
 ![giant lizard attack](https://github.com/iot-for-all/iot-central-high-availability-clients/blob/main/assets/disaster.jpg)
 
