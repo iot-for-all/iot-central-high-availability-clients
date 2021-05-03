@@ -1,0 +1,21 @@
+{
+    "name": "iot-central-high-availability-clients",
+    "version": "1.0.0",
+    "description": "IoT device sample to work with IoT Centrals high availability feature",
+    "main": "failover.js",
+    "scripts": {
+        "test": "node failover.js",
+        "start": "node failover.js"
+    },
+    "author": "firedog1024, sseiber",
+    "license": "MIT",
+    "dependencies": {
+        "azure-iot-common": "^1.12.8",
+        "azure-iot-device": "^1.17.3",
+        "azure-iot-device-mqtt": "^1.15.3",
+        "azure-iot-provisioning-device": "^1.8.7",
+        "azure-iot-provisioning-device-mqtt": "^1.7.7",
+        "azure-iot-security-symmetric-key": "^1.7.7"
+    },
+    "devDependencies": {}
+}
