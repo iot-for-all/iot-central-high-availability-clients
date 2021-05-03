@@ -77,8 +77,3 @@ coverage.html
 
 # node profiler
 profile**.txt
-
-# project
-client
-configs/**
-storage*/**
