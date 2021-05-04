@@ -127,7 +127,7 @@ export class FailoverDevice {
 
             // handlers for the direct method
             if (this.app.directMethodReceiveOn === '1') {
-                this.deviceClient.onDeviceMethod('echo', this.echoCommandDirectMethodHandler);
+                this.deviceClient.onDeviceMethod(FailoverDeviceCapability.cmEcho, this.echoCommandDirectMethodHandler);
             }
         }
         catch (err) {
@@ -269,7 +269,7 @@ export class FailoverDevice {
 
         if (methodName) {
             switch (methodName.value) {
-                case 'setAlarm':
+                case FailoverDeviceCapability.cmSetAlarm:
                     this.app.log(`C2D method: ${methodName.value}(${msg.data.toString('utf-8')})`);
 
                     await this.setAlarmCommandHandler(msg);
