@@ -15,13 +15,13 @@ const ProvisioningDeviceClient = require('azure-iot-provisioning-device').Provis
 const crypto = require('crypto');
 
 // device settings - FILL IN YOUR VALUES HERE
-const scopeId = "<Put your scope id here from IoT Central Administration -> Device connection>"
-const groupSymmetricKey = "<Put your group SAS primary key here from IoT Central Administration -> Device Connection -> SAS-IoT-Devices>"
+const scopeId = '<Put your scope id here from IoT Central Administration -> Device connection>';
+const groupSymmetricKey = '<Put your group SAS primary key here from IoT Central Administration -> Device Connection -> SAS-IoT-Devices>';
 
 // optional device settings - CHANGE IF DESIRED/NECESSARY
-const provisioningHost = "global.azure-devices-provisioning.net"
-const deviceId = "failover_js"
-const modelId = "dtmi:Sample:Failover;1"  // This model is available in the root of the Github repo (Failover.json) and can be imported into your Azure IoT central application
+const provisioningHost = 'global.azure-devices-provisioning.net';
+const deviceId = 'failover_js';
+const modelId = 'dtmi:Sample:Failover;1';  // This model is available in the root of the Github repo (Failover.json) and can be imported into your Azure IoT central application
 
 // test setting flags
 const telemetrySendOn = true
@@ -66,13 +66,19 @@ class MultiHubRetryPolicy extends ExponentialBackOffWithJitter {
 
 // handler for C2D message
 async function messageHandler(msg) {
-    let methodName = msg.properties.propertyList.find(o => o.key === 'method-name');
+    const methodName = msg.properties.propertyList.find(o => o.key === 'method-name');
 
-    // is this the setAlarm C2D message
-    if (methodName != null && methodName.value === 'setAlarm') {
-        console.log(`C2D method: ${methodName.value}(${msg.data.toString('utf-8')})`)
+    if (methodName) {
+        switch (methodName.value) {
+            case 'setAlarm':
+                console.log(`C2D method: ${methodName.value}(${msg.data.toString('utf-8')})`);
 
-        await setAlarmCommandHandler();
+                await setAlarmCommandHandler(msg);
+                break;
+
+            default:
+                console.log(`Unknown C2D method received: ${methodName.value}`);
+        }
     }
 }
 
@@ -125,7 +131,7 @@ async function connect() {
         }
 
         // connect to IoT Hub
-        await client.open()
+        await client.open();
 
         // obtain twin object
         deviceTwin = await client.getTwin();
@@ -136,7 +142,7 @@ async function connect() {
 
         // handlers for the direct method
         if (directMethodReceiveOn) {
-            client.onDeviceMethod('echo', echoCommandHandler);
+            client.onDeviceMethod('echo', echoCommandDirectMethodHandler);
         }
     }
     catch (err) {
@@ -158,7 +164,8 @@ async function disconnectHandler() {
     if (connected) {
         connected = false;
         console.log('Disconnected from IoT Central');
-        client.close()
+
+        await client.close()
 
         await connect();
     }
@@ -174,12 +181,18 @@ function errorHandler(err) {
 // sends telemetry on a set frequency
 async function sendTelemetry() {
     if (connected) {
-        const telemetry = { "temp": (20 + (Math.random() * 100)).toFixed(2), "humidity": (Math.random() * 100).toFixed(2) }
+        const telemetry = {
+            temp: (20 + (Math.random() * 100)).toFixed(2),
+            humidity: (Math.random() * 100).toFixed(2)
+        };
+
         const message = new Message(JSON.stringify(telemetry));
-        client.sendEvent(message, (err, res) => {
+
+        await client.sendEvent(message, (err) => {
             if (err) {
                 console.log(`Error: ${err.toString()}`);
-            } else {
+            }
+            else {
                 console.log(`Completed telemetry send ${JSON.stringify(telemetry)}`);
             }
         });
@@ -196,10 +209,11 @@ async function updateDeviceProperties(properties) {
             deviceTwin.properties.reported.update(properties, (err) => {
                 if (err) {
                     console.log(`Error: ${err.toString()}`);
-                    reject(err);
-                } else {
+                    return reject(err);
+                }
+                else {
                     console.log(`Completed property send ${JSON.stringify(properties)}`);
-                    resolve();
+                    return resolve();
                 }
             });
         });
@@ -214,7 +228,7 @@ async function updateDeviceProperties(properties) {
 async function sendReportedProperty() {
     if (connected) {
         const reportedPropertyPatch = {
-            "battery": (Math.random() * 100).toFixed(2)
+            battery: (Math.random() * 100).toFixed(2)
         };
 
         await updateDeviceProperties(reportedPropertyPatch);
@@ -229,16 +243,16 @@ async function desiredPropertyHandler(patch) {
 
         // acknowledge the desired property back to IoT Central
         let key = Object.keys(patch)[0];
-        if (key == "$version") {
+        if (key === '$version') {
             key = Object.keys(patch)[1];
         }
 
-        let reported_payload = {};
+        const reported_payload = {};
         reported_payload[key] = {
-            "value": patch[key],
-            "ac": 200,
-            "ad": "completed",
-            "av": patch['$version']
+            value: patch[key],
+            ac: 200,
+            ad: 'completed',
+            av: patch['$version']
         };
 
         await updateDeviceProperties(reported_payload);
@@ -247,8 +261,8 @@ async function desiredPropertyHandler(patch) {
 
 
 // handles direct method 'echo' from IoT Central (or hub)
-async function echoCommandHandler(request, response) {
-    console.log(`Executing direct method request: ${request.methodName}(${request.payload})`);
+async function echoCommandDirectMethodHandler(request, response) {
+    console.log(`Executing direct method request: ${request.methodName} "${request.payload}"`);
 
     try {
         // echos back the request payload
@@ -261,14 +275,13 @@ async function echoCommandHandler(request, response) {
 
 
 // handles the Cloud to Device (C2D) message setAlarm
-async function setAlarmCommandHandler(request, response) {
-    console.log(`Executing C2D message request: ${request.methodName}(${request.payload})`)
-
+async function setAlarmCommandHandler(msg) {
     try {
-        await response.send(200);
+        // delete the message from the device queue
+        await client.complete(msg);
     }
     catch (err) {
-        console.log(`Error in command response: ${err.message}`);
+        console.log(`Error handling C2D method: ${err.message}`);
     }
 }
 
@@ -294,7 +307,7 @@ async function setAlarmCommandHandler(request, response) {
         }
 
         // exit handler for cleanup of resources
-        function exitHandler(options, exitCode) {
+        async function exitHandler(options, exitCode) {
             if (options.cleanup) {
                 console.log('Cleaning up and exiting');
 
@@ -305,7 +318,7 @@ async function setAlarmCommandHandler(request, response) {
                     clearInterval(sendReportedPropertiesLoop);
                 }
 
-                client.close();
+                await client.close();
             }
             if (options.exit) {
                 process.exit();
