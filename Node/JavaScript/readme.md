@@ -1,6 +1,6 @@
-# Instructions for using the Azure IoT Node.js SDK to write an IoT Central high availability device client
+# Instructions for using the Azure IoT Node.js SDK to write an IoT Central high availability device client using JavaScript
 
-Azure IoT Node.js SDK: https://github.com/iot-for-all/iot-central-high-availability-clients/tree/main/Node 
+Azure IoT Node.js SDK: https://github.com/iot-for-all/iot-central-high-availability-clients/tree/main/Node/JavaScript 
 
 &nbsp;
 ## Prerequisite

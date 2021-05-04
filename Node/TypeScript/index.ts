@@ -56,19 +56,19 @@ async function start() {
         let sendTelemetryLoop;
         let sendReportedPropertiesLoop;
 
-        if (appContext.telemetrySendOn) {
+        if (appContext.telemetrySendOn === '1') {
             // send telemetry every 5 seconds
             sendTelemetryLoop = setInterval(failoverDevice.sendTelemetry, 5000);
         }
 
-        if (appContext.reportedPropertySendOn) {
+        if (appContext.reportedPropertySendOn === '1') {
             // send reported property every 15 seconds
             sendReportedPropertiesLoop = setInterval(failoverDevice.sendReportedProperty, 15000);
         }
 
         const exitHandler = async (options, exitCode) => {
             if (options.cleanup) {
-                appContext.log(`Cleaning up and exiting - code: ${exitCode}`);
+                appContext.log(`\nCleaning up and exiting - code: ${exitCode}`);
 
                 if (sendTelemetryLoop) {
                     clearInterval(sendTelemetryLoop);

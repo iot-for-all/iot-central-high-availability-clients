@@ -111,7 +111,7 @@ export class FailoverDevice {
             this.deviceClient.on('disconnect', this.disconnectHandler);
             this.deviceClient.on('error', this.errorHandler);
 
-            if (this.app.c2dCommandReceiveOn) {
+            if (this.app.c2dCommandReceiveOn === '1') {
                 this.deviceClient.on('message', this.messageHandler);
             }
 
@@ -121,12 +121,12 @@ export class FailoverDevice {
             // obtain twin object
             this.deviceTwin = await this.deviceClient.getTwin();
 
-            if (this.app.desiredPropertyReceiveOn) {
+            if (this.app.desiredPropertyReceiveOn === '1') {
                 this.deviceTwin.on('properties.desired', this.desiredPropertyHandler);
             }
 
             // handlers for the direct method
-            if (this.app.directMethodReceiveOn) {
+            if (this.app.directMethodReceiveOn === '1') {
                 this.deviceClient.onDeviceMethod('echo', this.echoCommandDirectMethodHandler);
             }
         }
@@ -195,30 +195,6 @@ export class FailoverDevice {
             .digest('base64');
     }
 
-    // handles desired properties from IoT Central (or hub)
-    @bind
-    private async desiredPropertyHandler_old(patch) {
-        if (Object.keys(patch).length > 1) {
-            this.app.log(`Desired property received, the data in the desired properties patch is: ${JSON.stringify(patch)}`);
-
-            // acknowledge the desired property back to IoT Central
-            let key = Object.keys(patch)[0];
-            if (key === '$version') {
-                key = Object.keys(patch)[1];
-            }
-
-            const reported_payload = {};
-            reported_payload[key] = {
-                value: patch[key],
-                ac: 200,
-                ad: 'completed',
-                av: patch['$version']
-            };
-
-            await this.updateDeviceProperties(reported_payload);
-        }
-    }
-
     @bind
     private async desiredPropertyHandler(desiredProperties: any) {
         try {
@@ -240,7 +216,12 @@ export class FailoverDevice {
                 switch (setting) {
                     // IDeviceSettings
                     case FailoverDeviceCapability.wpFanSpeed:
-                        patchedProperties[setting] = (this.deviceSettings[setting] as any) = value || 0;
+                        patchedProperties[setting] = {
+                            value: (this.deviceSettings[setting] as any) = value || 0,
+                            ac: 200,
+                            ad: 'completed',
+                            av: desiredProperties['$version']
+                        };
                         break;
 
                     default:
@@ -249,7 +230,7 @@ export class FailoverDevice {
                 }
             }
 
-            if (!Object.keys(patchedProperties || {}).length) {
+            if (Object.keys(patchedProperties || {}).length) {
                 await this.updateDeviceProperties(patchedProperties);
             }
         }

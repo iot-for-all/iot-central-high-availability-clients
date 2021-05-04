@@ -309,7 +309,7 @@ async function setAlarmCommandHandler(msg) {
         // exit handler for cleanup of resources
         async function exitHandler(options, exitCode) {
             if (options.cleanup) {
-                console.log('Cleaning up and exiting');
+                console.log('\nCleaning up and exiting');
 
                 if (sendTelemetryLoop !== null) {
                     clearInterval(sendTelemetryLoop);

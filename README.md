@@ -26,7 +26,8 @@ In this scenario we have an IoT Central application that has two hubs 'A' and 'B
 | Folder Name | Azure IoT device SDK                         | Folder Link                                                                         |
 |-------------|----------------------------------------------|-------------------------------------------------------------------------------------|
 |C            |https://github.com/Azure/azure-iot-sdk-c      |https://github.com/iot-for-all/iot-central-high-availability-clients/tree/main/C     |
-|Node         |https://github.com/Azure/azure-iot-sdk-node   |https://github.com/iot-for-all/iot-central-high-availability-clients/tree/main/Node  |
+|Node/JavaScript         |https://github.com/Azure/azure-iot-sdk-node   |https://github.com/iot-for-all/iot-central-high-availability-clients/tree/main/Node/JavaScript  |
+|Node/TypeScript         |https://github.com/Azure/azure-iot-sdk-node   |https://github.com/iot-for-all/iot-central-high-availability-clients/tree/main/Node/TypeScript  |
 |Python       |https://github.com/Azure/azure-iot-sdk-python |https://github.com/iot-for-all/iot-central-high-availability-clients/tree/main/Python|
 |CSharp       |https://github.com/Azure/azure-iot-sdk-csharp |https://github.com/iot-for-all/iot-central-high-availability-clients/tree/main/csharp|
 |Java         |https://github.com/Azure/azure-iot-sdk-java   |https://github.com/iot-for-all/iot-central-high-availability-clients/tree/main/java  |
