@@ -1,6 +1,6 @@
-# Instructions for using the Azure IoT Node.js SDK to write an IoT Central high availability device client
+# Instructions for using the Azure IoT Node.js SDK to write an IoT Central high availability device client using JavaScript
 
-Azure IoT Node.js SDK: https://github.com/iot-for-all/iot-central-high-availability-clients/tree/main/Node 
+Azure IoT Node.js SDK: https://github.com/iot-for-all/iot-central-high-availability-clients/tree/main/Node/JavaScript 
 
 &nbsp;
 ## Prerequisite
@@ -9,6 +9,8 @@ Read the repositories root [README](https://github.com/iot-for-all/iot-central-h
 
 &nbsp;
 ## What you need to edit before running this code
+
+NOTE: You should have a fork of this repository, or copy and use the source files independently in your own samples. Adding secrets to code is not recommended and opens the opportunity to accidentally check-in code with the secrets to GitHub.
 
 Change the following code to add in your scope id and group SAS key from the IoT Central application.  Both can be found in the Administration -> Device connection page.
 
