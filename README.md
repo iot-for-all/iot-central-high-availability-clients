@@ -153,3 +153,4 @@ A couple of batch (.bat) files are provided in the root of the this repository *
 In all these examples there is no code to optimize connection speed, all connections are routed through DPS.  In a real device it might be more optimal to cache the hostname returned from DPS and when disconnected from the IoT Hub attempt to connect using the cached hostname, if the connection fails at that point drop back to DPS for a new hostname and cache it.  This optimization will reduce the connection time and remove the performacne penalty when the connection drops for various reasons outside of an IoT Hub failure.
 
 Please let us know if you find any errors or have suggestions to improve the code in this repository.  Finally, good luck and be on the look out for for giant lizard attacks!
+
