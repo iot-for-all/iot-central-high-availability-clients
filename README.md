@@ -36,7 +36,6 @@ In this scenario we have an IoT Central application that has two hubs 'A' and 'B
 * Device 'XYZ' reconnects to IoT Hub 'A' and continues sending telemetry and operating normally
 * throughout this giant lizard disaster no data was lost and your device and IoT Central application continue to operate normally
 
-&nbsp;
 ## Directory structure
 
 | Folder Name | Azure IoT device SDK                         | Folder Link                                                                         |
@@ -48,7 +47,6 @@ In this scenario we have an IoT Central application that has two hubs 'A' and 'B
 |CSharp       |https://github.com/Azure/azure-iot-sdk-csharp |https://github.com/iot-for-all/iot-central-high-availability-clients/tree/main/csharp|
 |Java         |https://github.com/Azure/azure-iot-sdk-java   |https://github.com/iot-for-all/iot-central-high-availability-clients/tree/main/java  |
 
-&nbsp;
 ## Functionality of the client
 
 Each of the samples has the exact same functionality coded using the same IoT Central device template.  The device template can be found in the file [failover.json](https://github.com/iot-for-all/iot-central-high-availability-clients/blob/main/Failover.json).  This can be imported into your IoT Central application and each of the samples will associate itself with this model by default.
@@ -95,7 +93,6 @@ const c2dCommandReceiveOn = true
 
 Each of the sample folders contains a readme that discusses running the sample and includes the above information specific to that sample and the programming language used.
 
-&nbsp;
 ## Testing failover and failback scenarios
 
 We are unable to predict when the next giant lizard attack will happen and to which data center so we have provided you with your own virtual giant lizard to test failover scenarios.  The IoT Central development team has updated the Azure Command Line Interface (CLI) extension for IoT Central so you can force a device to either fail-over or fail-back from one IoT Hub to another.
@@ -114,7 +111,6 @@ az iot central device manual-failover -n <IoT Central application id> -d <device
 |device id                   |This is the device identity for the device you wish to failover                   |failover_device                      |
 |application host name       |The first part of the URL of your IoT Central application (before the first dot)  |mycentralapp                         |
 |application DNS suffix name |The rest of the URL of your IoT Central application (after the first dot)         |azureiotcentral.com                  |
-&nbsp;
 
 The output from the command should look like this:
 
@@ -151,8 +147,6 @@ A couple of batch (.bat) files are provided in the root of the this repository *
 |application host name       |The first part of the URL of your IoT Central application (before the first dot)  |mycentralapp                         |
 |application DNS suffix name |The rest of the URL of your IoT Central application (after the first dot)         |azureiotcentral.com                  |
 
-&nbsp;
-&nbsp;
 
 ## Final thoughts
 
