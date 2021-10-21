@@ -2,7 +2,7 @@
     "name": "iot-central-high-availability-clients",
     "version": "1.0.0",
     "description": "IoT device sample to work with IoT Centrals high availability feature",
-    "main": "index.js",
+    "main": "./dist/index.js",
     "scripts": {
         "eslint": "eslint -c .eslintrc.json --ext .ts .",
         "build": "node ./node_modules/typescript/bin/tsc -p .",

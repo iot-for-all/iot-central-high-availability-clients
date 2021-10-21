@@ -71,36 +71,40 @@ export class FailoverDevice {
     // connect to IoT Central/Hub via Device Provisioning Servicee (DPS)
     public async connect(): Promise<void> {
         try {
-            // calc device symmetric key from group symmetric key
-            const deviceSymmetricKey = this.computeDerivedSymmetricKey(this.app.groupSymmetricKey, this.app.deviceId);
+            let connectionString = this.app.connectionString;
+            if (!connectionString) {
+                // calc device symmetric key from group symmetric key
+                const deviceSymmetricKey = this.computeDerivedSymmetricKey(this.app.groupSymmetricKey, this.app.deviceId);
 
-            // DPS provision with device symmetric key
-            const provisioningSecurityClient = new SymmetricKeySecurityClient(this.app.deviceId, deviceSymmetricKey);
-            const provisioningClient = ProvisioningDeviceClient.create(this.app.provisioningHost, this.app.scopeId, new ProvisioningTransport(), provisioningSecurityClient);
+                // DPS provision with device symmetric key
+                const provisioningSecurityClient = new SymmetricKeySecurityClient(this.app.deviceId, deviceSymmetricKey);
+                const provisioningClient = ProvisioningDeviceClient.create(this.app.provisioningHost, this.app.scopeId, new ProvisioningTransport(), provisioningSecurityClient);
 
-            // set the model to register against
-            provisioningClient.setProvisioningPayload({
-                iotcModelId: this.app.modelId
-            });
-
-            // register the device and get the hub host name
-            const connectionString = await new Promise<string>((resolve, reject) => {
-                provisioningClient.register((dpsError, dpsResult) => {
-                    if (dpsError) {
-                        this.app.log(`DPS register failed: ${JSON.stringify(dpsError, null, 4)}`);
-
-                        return reject(dpsError);
-                    }
-
-                    this.app.log('registration succeeded');
-                    this.app.log(`assigned hub: ${dpsResult.assignedHub}`);
-                    this.app.log(`deviceId: ${dpsResult.deviceId}`);
-
-                    return resolve(`HostName=${dpsResult.assignedHub};DeviceId=${dpsResult.deviceId};SharedAccessKey=${deviceSymmetricKey}`);
+                // set the model to register against
+                provisioningClient.setProvisioningPayload({
+                    iotcModelId: this.app.modelId
                 });
-            });
+
+                // register the device and get the hub host name
+                connectionString = await new Promise<string>((resolve, reject) => {
+                    provisioningClient.register((dpsError, dpsResult) => {
+                        if (dpsError) {
+                            this.app.log(`DPS register failed: ${JSON.stringify(dpsError, null, 4)}`);
+
+                            return reject(dpsError);
+                        }
+
+                        this.app.log('registration succeeded');
+                        this.app.log(`assigned hub: ${dpsResult.assignedHub}`);
+                        this.app.log(`deviceId: ${dpsResult.deviceId}`);
+
+                        return resolve(`HostName=${dpsResult.assignedHub};DeviceId=${dpsResult.deviceId};SharedAccessKey=${deviceSymmetricKey}`);
+                    });
+                });
+            }
 
             // create client from connection string
+            this.app.log(`Connection string: ${connectionString}`);
             this.deviceClient = Client.fromConnectionString(connectionString, Protocol);
 
             // cannot use the default retry logic built into the SDK as it will not fallback to DPS
@@ -323,8 +327,17 @@ export class FailoverDevice {
         this.deviceConnected = false;
         this.app.log('Disconnected from IoT Central');
 
+        this.app.log('Closing device client connection');
         await this.deviceClient.close();
 
+        this.app.log('Waiting for 90sec...');
+        await new Promise((resolve) => {
+            setTimeout(() => {
+                return resolve('');
+            }, 1000 * 90);
+        });
+
+        this.app.log('Starting device registration');
         await this.connect();
     }
 
