@@ -1,4 +1,20 @@
-# iot-central-high-availability-clients
+---
+page_type: sample
+name: "IoT Central high availability client samples"
+description: "Sample code for IoT Central device clients that shows how to handle failover scenarios."
+languages:
+- c
+- csharp
+- java
+- nodejs
+- python
+products:
+- azure-iot-central
+urlFragment: iotc-high-availability-clients
+---
+
+# IoT Central high availability client samples
+
 Coding Azure IoT devices to work with IoT Centrals high availability feature.  Each folder in this repository contains a full device client sample that illustrates how to code a high availability device client for use with IoT Central.
 
 Ask yourself is your IoT Central device ready for this kind of disaster:
@@ -20,7 +36,6 @@ In this scenario we have an IoT Central application that has two hubs 'A' and 'B
 * Device 'XYZ' reconnects to IoT Hub 'A' and continues sending telemetry and operating normally
 * throughout this giant lizard disaster no data was lost and your device and IoT Central application continue to operate normally
 
-&nbsp;
 ## Directory structure
 
 | Folder Name | Azure IoT device SDK                         | Folder Link                                                                         |
@@ -32,22 +47,21 @@ In this scenario we have an IoT Central application that has two hubs 'A' and 'B
 |CSharp       |https://github.com/Azure/azure-iot-sdk-csharp |https://github.com/iot-for-all/iot-central-high-availability-clients/tree/main/csharp|
 |Java         |https://github.com/Azure/azure-iot-sdk-java   |https://github.com/iot-for-all/iot-central-high-availability-clients/tree/main/java  |
 
-&nbsp;
 ## Functionality of the client
 
 Each of the samples has the exact same functionality coded using the same IoT Central device template.  The device template can be found in the file [failover.json](https://github.com/iot-for-all/iot-central-high-availability-clients/blob/main/Failover.json).  This can be imported into your IoT Central application and each of the samples will associate itself with this model by default.
 
 The functionality of each sample is:
 
-•	Connect to IoT Central using DPS using the group symmetric SAS token (device first registration)
-•	Handles disconnect and failover to an alternate IoT Hub via DPS
-•	Sending telemetry on a set period
-•	Sending reported properties on a set period
-•	Handles direct method commands
-•	Handles C2D commands
-•	Handles desired properties from IoT Central and acknowledge the receipt
-•	Disconnects cleanly
-•	Written using MQTT transport
+* Connect to IoT Central using DPS using the group symmetric SAS token (device first registration)
+* Handles disconnect and failover to an alternate IoT Hub via DPS
+* Sending telemetry on a set period
+* Sending reported properties on a set period
+* Handles direct method commands
+* Handles C2D commands
+* Handles desired properties from IoT Central and acknowledge the receipt
+* Disconnects cleanly
+* Written using MQTT transport
 
 All samples all have a section that looks like this (this is the Node.js version):
 
@@ -79,15 +93,9 @@ const c2dCommandReceiveOn = true
 
 Each of the sample folders contains a readme that discusses running the sample and includes the above information specific to that sample and the programming language used.
 
-&nbsp;
 ## Testing failover and failback scenarios
 
 We are unable to predict when the next giant lizard attack will happen and to which data center so we have provided you with your own virtual giant lizard to test failover scenarios.  The IoT Central development team has updated the Azure Command Line Interface (CLI) extension for IoT Central so you can force a device to either fail-over or fail-back from one IoT Hub to another.
-
-```diff
-- Note: the Azure IoT Central CLI extension is not publically available at the time of writing this.  
-- When the high availability feature in IoT Central ships the CLI will be made available
-```
 
 To install the Azure CLI tool please see this link https://docs.microsoft.com/en-us/cli/azure/install-azure-cli  Once installed you can install the latest IoT Central extension by following the instructions here https://github.com/Azure/azure-iot-cli-extension
 
@@ -103,7 +111,6 @@ az iot central device manual-failover -n <IoT Central application id> -d <device
 |device id                   |This is the device identity for the device you wish to failover                   |failover_device                      |
 |application host name       |The first part of the URL of your IoT Central application (before the first dot)  |mycentralapp                         |
 |application DNS suffix name |The rest of the URL of your IoT Central application (after the first dot)         |azureiotcentral.com                  |
-&nbsp;
 
 The output from the command should look like this:
 
@@ -140,11 +147,10 @@ A couple of batch (.bat) files are provided in the root of the this repository *
 |application host name       |The first part of the URL of your IoT Central application (before the first dot)  |mycentralapp                         |
 |application DNS suffix name |The rest of the URL of your IoT Central application (after the first dot)         |azureiotcentral.com                  |
 
-&nbsp;
-&nbsp;
 
 ## Final thoughts
 
 In all these examples there is no code to optimize connection speed, all connections are routed through DPS.  In a real device it might be more optimal to cache the hostname returned from DPS and when disconnected from the IoT Hub attempt to connect using the cached hostname, if the connection fails at that point drop back to DPS for a new hostname and cache it.  This optimization will reduce the connection time and remove the performacne penalty when the connection drops for various reasons outside of an IoT Hub failure.
 
 Please let us know if you find any errors or have suggestions to improve the code in this repository.  Finally, good luck and be on the look out for for giant lizard attacks!
+
