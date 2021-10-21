@@ -9,6 +9,7 @@ export interface AppContext {
     // device settings - SET VALUES IN .env file
     scopeId: string; // Put your scope id here from IoT Central Administration -> Device connection
     groupSymmetricKey: string; // Put your group SAS primary key here from IoT Central Administration -> Device Connection -> SAS-IoT-Devices
+    connectionString: string;
 
     // optional device settings - CHANGE IF DESIRED/NECESSARY
     provisioningHost: string;
@@ -29,6 +30,7 @@ export interface AppContext {
 const appContext: AppContext = {
     scopeId: process.env.scopeId,
     groupSymmetricKey: process.env.groupSymmetricKey,
+    connectionString: process.env.connectionString,
     provisioningHost: process.env.provisioningHost || defaultProvisioningHost,
     deviceId: process.env.deviceId || defaultDeviceId,
     modelId: process.env.modelId || defaultDeviceModel,
@@ -39,7 +41,7 @@ const appContext: AppContext = {
     c2dCommandReceiveOn: process.env.c2dCommandReceiveOn || '1',
     log: (message: string) => {
         // eslint-disable-next-line no-console
-        console.log(message);
+        console.log(`[${new Date().toISOString()}] ${message}`);
     }
 };
 
@@ -67,6 +69,7 @@ async function start() {
         }
 
         const exitHandler = async (options, exitCode) => {
+            appContext.log('Exit handler called');
             if (options.cleanup) {
                 appContext.log(`\nCleaning up and exiting - code: ${exitCode}`);
 
